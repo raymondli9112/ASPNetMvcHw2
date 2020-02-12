@@ -75,6 +75,8 @@ namespace Li_Raymond_HW2.Controllers
            
             int tempNumberOfTacos = 0;
             int tempNumberOfSandwiches = 0;
+            if (string.IsNullOrEmpty(numberOfTacos))
+                numberOfTacos = "0";
             try
             {
                 tempNumberOfTacos = int.Parse(numberOfTacos);
@@ -86,6 +88,8 @@ namespace Li_Raymond_HW2.Controllers
             if(tempNumberOfTacos < 0)
                 return numberOfTacos + " is not in the required range!";
 
+            if (string.IsNullOrEmpty(numberOfSandwiches))
+                numberOfSandwiches = "0";
             try
             {
                 tempNumberOfSandwiches = int.Parse(numberOfSandwiches);
