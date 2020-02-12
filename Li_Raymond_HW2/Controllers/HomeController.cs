@@ -22,7 +22,12 @@ namespace Li_Raymond_HW2.Controllers
                 return View("Index");
             }
 
-            //Validate(customerCode, numberOfTacos, numberOfSandwiches);
+            var msg = ValidateTotalItem(numberOfTacos, numberOfSandwiches);
+            if (!string.IsNullOrEmpty(msg))
+            {
+                ViewBag.ErrorMessage = msg;
+                return View("Index");
+            }
 
             decimal decTemp = 0.00M;
             ViewBag.CustomerCode = customerCode.ToUpper();
@@ -63,23 +68,23 @@ namespace Li_Raymond_HW2.Controllers
             }
         }
 
-        private void Validate(string numberOfTacos, string numberOfSandwiches)
+        private string ValidateTotalItem(string numberOfTacos, string numberOfSandwiches)
         {
+            if(string.IsNullOrEmpty(numberOfTacos) && string.IsNullOrEmpty(numberOfSandwiches))
+                return "You must purchase at least one item!";
+           
             int tempNumberOfTacos = 0;
             int tempNumberOfSandwiches = 0;
-            if (numberOfTacos == null)
-                numberOfTacos = "0";
-            if (numberOfSandwiches == null)
-                numberOfSandwiches = "0";
             try
             {
                 tempNumberOfTacos = int.Parse(numberOfTacos);
             }
             catch
             {
-                ModelState.AddModelError(nameof(numberOfTacos), numberOfTacos + " is not a valid integer!");
-                return;
+                return numberOfTacos + " is not a valid integer!";
             }
+            if(tempNumberOfTacos < 0)
+                return numberOfTacos + " is not in the required range!";
 
             try
             {
@@ -87,10 +92,15 @@ namespace Li_Raymond_HW2.Controllers
             }
             catch
             {
-                ModelState.AddModelError(nameof(numberOfSandwiches), numberOfSandwiches + " is not a valid integer!");
-                return;
+                return tempNumberOfSandwiches + " is not a valid integer!";
             }
+            if (tempNumberOfSandwiches < 0)
+                return tempNumberOfSandwiches + " is not in the required range!";
+
+            if (tempNumberOfTacos + tempNumberOfSandwiches <= 0)
+                return "You must purchase at least one item!";
+
+            return string.Empty;
         }
-    
     }
 }
